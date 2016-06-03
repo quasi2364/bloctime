@@ -1,5 +1,6 @@
 (function() {
     function HomeCtrl() {
+    	console.log('hello');
     }
     
     angular
