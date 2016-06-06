@@ -22,9 +22,14 @@
                     if(scope.isCounting){
                         return function(){
                             scope.isCounting = false;
-                            scope.activity = "Start Session";
-                            scope.timer = SESSION_TIME;
                             $interval.cancel(promise);
+                            if (scope.timerType == "session") {
+                                scope.timer = SESSION_TIME;
+                                scope.activity = "Start Session";   
+                            } else {
+                                scope.timer = BREAK_TIME;
+                                scope.activity = "Start Break";  
+                            }
                         }();
                     }
                     
