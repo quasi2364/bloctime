@@ -9,57 +9,79 @@
             },
             link: function(scope, element, attributes){
 
+                // Initial State
                 scope.isCounting = false;
-                scope.activity = "Start Session";
-                scope.timerType = "session";
+                scope.buttonText = "Start Session";
+                scope.sessionType = "session";
                 SESSION_TIME = 5;
                 BREAK_TIME = 3;
-                LONG_BREAK_TIME = 30*60;
+                LONG_BREAK_TIME = 10;
                 scope.timer = SESSION_TIME;
-                var promise = null;
-                
-                scope.startSession = function(){
-                    if(scope.isCounting){
-                        return function(){
-                            scope.isCounting = false;
-                            $interval.cancel(promise);
-                            if (scope.timerType == "session") {
-                                scope.timer = SESSION_TIME;
-                                scope.activity = "Start Session";   
-                            } else {
-                                scope.timer = BREAK_TIME;
-                                scope.activity = "Start Break";  
-                            }
-                        }();
-                    }
+                scope.sessionsCompleted = 0;
+                var promise = null; 
+
+                //Handles all logic for when a user clicks to start or reset a session
+                scope.runSession = function(){
                     
-                    scope.isCounting = true;
-                    console.log(scope.timerType);
+                    //Starts a session countdown
+                    var startSession = function() {
+                        scope.buttonText = "Reset";
+                        scope.isCounting = true;
 
-                    if (scope.timerType == "break") {
-                        scope.timer = BREAK_TIME;
-                        scope.activity = "Reset";
-                    } else {
-                        scope.timer = SESSION_TIME;
-                        scope.activity = "Reset";
-                    }
-
-                    promise = $interval(function(){
-                        scope.timer = scope.timer - 1;
-                        if(scope.timer < 1){
-                            $interval.cancel(promise);
-                            scope.isCounting = false;
-                            if (scope.timerType == "session") {
-                                scope.timerType = "break";
-                                scope.activity = "Start Break";
-                            } else {
-                                scope.timerType = "session"; 
-                                scope.activity = "Start Session"
-                            }                              
+                        //Set session type and session attributes  
+                        if (scope.sessionType == "session") {
+                            scope.timer = SESSION_TIME;
+                        } else if (scope.sessionType == "break") {
+                            scope.timer = BREAK_TIME;
+                        } else {
+                            scope.timer = LONG_BREAK_TIME;
                         }
-                    }, 1000, 0);
-                };
-                
+
+                        promise = $interval(function(){
+                            scope.timer = scope.timer - 1;
+                            if(scope.timer < 1){
+                                $interval.cancel(promise);
+                                scope.isCounting = false;
+                                if (scope.sessionType == "session") {
+                                    scope.sessionsCompleted++;
+                                    if (scope.sessionsCompleted % 2 == 0) {
+                                        scope.sessionType = "longBreak";
+                                        scope.buttonText = "Start Long Break";
+                                    } else {
+                                        scope.sessionType = "break";
+                                        scope.buttonText = "Start Break"       
+                                    }
+                                } else {
+                                    scope.sessionType = "session"; 
+                                    scope.buttonText = "Start Session"
+                                }                              
+                            }
+                        }, 1000, 0);                        
+                    };
+
+                    var resetSession = function() {
+                        scope.isCounting = false;
+                        $interval.cancel(promise);
+
+                        if (scope.sessionType == "session") {
+                            scope.timer = SESSION_TIME;
+                            scope.buttonText = "Start Session";   
+                        } else if (scope.sessionType == "break") {
+                            scope.timer = BREAK_TIME;
+                            scope.buttonText = "Start Break";  
+                        } else {
+                            scope.timer = LONG_BREAK_TIME;
+                            scope.buttonText = "Start Long Break";
+                        }                       
+                    };
+
+                    //Call function to to start or reset a session
+                    if(scope.isCounting){
+                        resetSession();    
+                    } else {
+                        startSession();
+                    }
+                };             
             }
         };
     }
