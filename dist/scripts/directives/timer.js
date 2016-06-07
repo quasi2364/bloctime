@@ -20,13 +20,17 @@
                 scope.sessionsCompleted = 0;
                 var promise = null; 
 
-                //Handles all logic for when a user clicks to start or reset a session
+                //Handles logic for when a user clicks to start or reset a session
                 scope.runSession = function(){
                     
-                    //Starts a session countdown
+                    // Starts a session countdown and handles logic
+                    // for when session is done and timer hits zero
                     var startSession = function() {
                         scope.buttonText = "Reset";
                         scope.isCounting = true;
+                        scope.mySound = new buzz.sound("/assets/sounds/ding.mp3", {
+                            preload: true
+                        });
 
                         //Set session type and session attributes  
                         if (scope.sessionType == "session") {
@@ -40,6 +44,7 @@
                         promise = $interval(function(){
                             scope.timer = scope.timer - 1;
                             if(scope.timer < 1){
+                                scope.mySound.play();
                                 $interval.cancel(promise);
                                 scope.isCounting = false;
                                 if (scope.sessionType == "session") {
@@ -75,7 +80,7 @@
                         }                       
                     };
 
-                    //Call function to to start or reset a session
+                    //Call functions to start or reset a session when button is clicked
                     if(scope.isCounting){
                         resetSession();    
                     } else {
