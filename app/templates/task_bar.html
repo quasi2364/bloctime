@@ -1,0 +1,19 @@
+<section class="task-bar" ng-controller="TaskBarCtrl as taskBar">
+	<div class="container">
+		<h2>Task History</h2>
+		<form ng-submit="tasks.$add(newTask)">
+			<input ng-model="newTask"/>
+			<button type="submit">Add Task</button>
+		</form>
+		<table ng-repeat="task in tasks">
+			<tr>
+				<td>
+					<p>{{task.$value}}</p>
+				</td>
+				<td>
+					<button ng-click="tasks.$remove(task)"> X </button>
+				</td>
+			</tr>
+		</table>
+	</div>
+</section>

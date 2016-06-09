@@ -1,0 +1,25 @@
+.task-bar {
+	width: 200px;
+	min-height: 600px;
+	border: 1px solid gray;
+	padding: 40px;
+}
+
+.timer {
+/*	border: 1px solid gray;*/
+	padding: 20px;
+	position: absolute;
+	left: 40%;
+	top: 20%;
+
+}
+
+.timer .timer-numbers {
+	font-size: 128px;
+}
+
+.timer .timer-button {
+	width: 100%;
+	font-size: 20px;
+	padding: 5px;
+}

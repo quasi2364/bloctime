@@ -13,7 +13,7 @@
                 scope.isCounting = false;
                 scope.buttonText = "Start Session";
                 scope.sessionType = "session";
-                SESSION_TIME = 5;
+                SESSION_TIME = 25*60;
                 BREAK_TIME = 3;
                 LONG_BREAK_TIME = 10;
                 scope.timer = SESSION_TIME;
